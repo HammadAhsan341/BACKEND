@@ -1,10 +1,26 @@
 const express = require("express");
 const router = express.Router();
+const multer = require('multer');
 const {verifyAdmin}= require('../middlewares/auth');
 const admin_controller = require("../controllers/AdminController");
-
+const path = require("path");
+// Set up Multer storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, path.join(__dirname, '../public/partyimages'));
+    },
+    filename: (req, file, cb) => {
+      const name = Date.now() + '-' + file.originalname;
+      cb(null, name);
+    },
+  });
+  
+  const upload = multer({ storage });
+  
+  // Serve static files from the "public" directory
+  router.use(express.static('public'));
 //Register Route
-router.post('/register_candidate',verifyAdmin,admin_controller.register_candidate);
+router.post('/register_candidate', upload.single('image'),verifyAdmin,admin_controller.register_candidate);
 
 //Admin_Login Route
 router.post('/Login_Admin',admin_controller.Login_Admin);

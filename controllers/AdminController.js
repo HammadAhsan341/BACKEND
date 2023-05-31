@@ -4,17 +4,20 @@ const CastVote = require('../models/CastVote');
 const bcryptjs = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
+
 const register_candidate = async (req, res) => {
   try {
+    const baseUrl = `http://localhost:4000`;
     const candidate = new Candidate({
       candidate_name: req.body.candidate_name,
       cnic: req.body.cnic,
       // dob: req.body.dob,
       phonenumber: req.body.phonenumber,
       partyname: req.body.partyname,
+      image: `${baseUrl}/partyimages/${req.file.filename}`, // Save the image with the base URL
       // qualification: req.body.qualification
     });
-
+  
     const candidateData = await Candidate.findOne({ cnic: req.body.cnic });
     if (candidateData) {
       res.status(200).send({ success: false, msg: "This candidate already exists!" });
