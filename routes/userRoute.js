@@ -25,4 +25,9 @@ router.post('/verify-otp',user_controller.verify_otp);
 router.post("/cast_vote",verifyToken,user_controller.cast_vote);
 //checkAvailability
 router.get("/checkAvailability",verifyToken,user_controller.checkAvailability);
+// Update user route
+router.put('/update_user/:id', user_controller.update_user);
+
+// Delete user route
+router.delete('/delete_user/:id', user_controller.delete_user);
 module.exports = router;

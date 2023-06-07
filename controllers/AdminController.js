@@ -150,8 +150,22 @@ const displayUsers = async (req, res) => {
     res.status(500).json({ success: false, msg: "Internal server error" });
   }
 };
+// Update User
+// const update_user = async (req, res) => {
+//   try {
+//     const updates = req.body;
 
+//     const updatedUser = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
 
+//     if (!updatedUser) {
+//       return res.status(404).json({ success: false, message: "User not found." });
+//     }
+
+//     res.status(200).json({ success: true, user: updatedUser });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: "Failed to update user.", error: error.message });
+//   }
+// };
 
 
 
@@ -167,6 +181,6 @@ module.exports = {
   Login_Admin,
   display_voters,
   displayUsers,
- 
+
 
 }

@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 const CastVote = require('../models/CastVote');
 const Candidate = require('../models/Candidate');
 
+
 // token generate method
 const create_token = async (id) => {
     try {
@@ -334,9 +335,48 @@ const checkAvailability = async (req, res) => {
       res.status(500).json({ success: false, message: "Failed to check availability.", error: error.message });
     }
   };
-
-
-
+  const update_user = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { name, email, password } = req.body;
+  
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).json({ success: false, msg: "User not found" });
+      }
+  
+      user.name = name || user.name;
+      user.email = email || user.email;
+  
+      if (password) {
+        const hashedPassword = await bcryptjs.hash(password, 10);
+        user.password = hashedPassword;
+      }
+  
+      await user.save();
+  
+      res.status(200).json({ success: true, msg: "User updated successfully" });
+    } catch (error) {
+      res.status(400).json({ success: false, msg: error.message });
+    }
+  };
+  
+  const delete_user = async (req, res) => {
+    try {
+      const { id } = req.params;
+  
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).json({ success: false, msg: "User not found" });
+      }
+  
+      await User.findByIdAndDelete(id);
+  
+      res.status(200).json({ success: true, msg: "User deleted successfully" });
+    } catch (error) {
+      res.status(400).json({ success: false, msg: error.message });
+    }
+  };
 
 
 
@@ -351,4 +391,6 @@ module.exports = {
     verify_otp,
     userProfile,
     checkAvailability,
+    update_user,
+    delete_user
 };
