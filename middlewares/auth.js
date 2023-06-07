@@ -28,7 +28,7 @@ const verifyAdmin = async (req, res, next) => {
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
     return res.status(400).json({ success: false, msg: "Invalid token format." });
-  }
+  } 
 
   const token = authorization.split(" ")[1];
 

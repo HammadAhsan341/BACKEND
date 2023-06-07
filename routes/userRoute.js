@@ -15,7 +15,7 @@ router.get('/profile',user_controller.userProfile);
 router.post('/forget-password',user_controller.forget_password);
 
 //Reset Password Route
-router.put('/reset-password',user_controller.reset_password);
+router.put('/reset-password/:token',user_controller.reset_password);
 // Send OTP route
 router.post('/send-otp',user_controller.send_otp);
 
@@ -23,4 +23,6 @@ router.post('/send-otp',user_controller.send_otp);
 router.post('/verify-otp',user_controller.verify_otp);
 // Cast vote
 router.post("/cast_vote",verifyToken,user_controller.cast_vote);
+//checkAvailability
+router.get("/checkAvailability",verifyToken,user_controller.checkAvailability);
 module.exports = router;

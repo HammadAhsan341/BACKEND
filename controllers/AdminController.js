@@ -17,7 +17,7 @@ const register_candidate = async (req, res) => {
       image: `${baseUrl}/partyimages/${req.file.filename}`, // Save the image with the base URL
       // qualification: req.body.qualification
     });
-  
+
     const candidateData = await Candidate.findOne({ cnic: req.body.cnic });
     if (candidateData) {
       res.status(200).send({ success: false, msg: "This candidate already exists!" });
@@ -27,7 +27,7 @@ const register_candidate = async (req, res) => {
       res.status(200).send({ success: true, data: candidate_data });
     }
 
-  } catch (error) { 
+  } catch (error) {
     res.status(400).send(error.message);
   }
 }
@@ -36,7 +36,7 @@ const Login_Admin = async (req, res) => {
   try {
     const { cnic, password } = req.body;
 
-    const user = await User.findOne({ cnic});
+    const user = await User.findOne({ cnic });
     if (!user) {
       return res.status(403).send({ success: false, msg: "Admin Data is Not Valid!" });
     }
@@ -67,11 +67,12 @@ const delete_candidate = async (req, res) => {
 const update_candidate = async (req, res) => {
   try {
     const updatedcandidate = await Candidate.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
-    res.status(200).json(updatedcandidate)
+    res.status(200).json({ success: true, msg: "Updated successfully", updatedcandidate });
   } catch (error) {
     res.status(500).json({ success: false, msg: "Internal server error" });
   }
-}
+};
+
 // display all candidates.
 const display_candidates = async (req, res) => {
   try {
@@ -84,7 +85,7 @@ const display_candidates = async (req, res) => {
 // display all voters
 const display_voters = async (req, res) => {
   try {
-    const voters = await Voter.find();
+    const voters = await voters.find();
     res.status(200).json(voters);
   } catch (error) {
     res.status(500).json({ success: false, msg: "Internal server error" });
@@ -133,11 +134,24 @@ const displayResult = async (req, res) => {
       console.log(winnerparty, winnerName);
     }
 
-    res.status(200).json({ success: true, data: results, winnerName ,winnerparty});
+    res.status(200).json({ success: true, data: results, winnerName, winnerparty });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
+}
+//Display all registered users
+const displayUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    const userCount = users.length; // Get the count of registered users
+    const message = `Total users: ${userCount}`;
+    res.status(200).json({ message, users });
+  } catch (error) {
+    res.status(500).json({ success: false, msg: "Internal server error" });
+  }
 };
+
+
 
 
 
@@ -151,6 +165,8 @@ module.exports = {
   display_candidates,
   displayResult,
   Login_Admin,
-  display_voters
+  display_voters,
+  displayUsers,
+ 
 
 }
